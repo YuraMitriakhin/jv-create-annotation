@@ -1,16 +1,18 @@
 package core.basesyntax.controller;
 
+import core.basesyntax.annotation.Inject;
 import core.basesyntax.dao.BetDao;
-import core.basesyntax.dao.BetDaoImpl;
 import core.basesyntax.dao.UserDao;
-import core.basesyntax.dao.UserDaoImpl;
 import core.basesyntax.model.Bet;
 import core.basesyntax.model.User;
 import java.util.Scanner;
 
 public class ConsoleHandler {
-    private BetDao betDao = new BetDaoImpl();
-    private UserDao userDao = new UserDaoImpl();
+    @Inject
+    private BetDao betDao;
+
+    @Inject
+    private UserDao userDao;
 
     public void userHandler() {
         Scanner scanner = new Scanner(System.in);
@@ -26,6 +28,7 @@ public class ConsoleHandler {
             System.out.println(user);
             System.out.println("Do you want input new user(y/n)?");
             if (scanner.nextLine().equals("n")) {
+                System.out.println(betDao.getAll());
                 break;
             }
         }
@@ -49,6 +52,9 @@ public class ConsoleHandler {
             }
             if (!userDao.addBetToUser(user, bet)) {
                 System.out.println("You have some mistake. Bet hasn't added!");
+            }
+            if (bet != null) {
+                betDao.add(bet);
             }
         }
     }
